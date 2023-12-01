@@ -1,4 +1,4 @@
-# Advent of code solution for year 2023 day 1
+# 'Advent of code' solution for year 2023 day 1
 import sys
 
 input = None

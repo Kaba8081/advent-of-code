@@ -1,4 +1,6 @@
 # advent-of-code
+![](https://img.shields.io/badge/stars%20⭐-2-yellow)
+![](https://img.shields.io/badge/days%20completed-1-red)
 ## Overwiew
 This repository contains my sollutions to a series of programming challanges called [Advent of code](https://adventofcode.com/).
 
@@ -16,7 +18,24 @@ By default the program will try to get the problem's input based on the current 
   specify desired day of the challange (between 1 - 25)
 - `-c` or `--create` \
   **default**: False \
-  When set to `True` creates a `main.py` file inside the `./year/day/` directory
+  When set to `True` creates a `main.py` file inside the `./year/day/` directory with the following contents:
+  ```python3
+  # 'Advent of code' solution for year {0} day {1}
+  import os
+  import sys
+       
+  dir_path = os.path.dirname(os.path.realpath(__file__))
+  input = None
+  
+  with open(os.path.join(dir_path, "input.txt"), "r") as file:    
+      input = file.read().strip().splitlines()
+  if not input:
+      print("Error! Input file is empty!")
+      sys.exit()
+                          
+  if __name__ == "__main__":
+      sys.exit()
+  ```
 
 ### AOC_COOKIE
 Advent of code's input files are generated based on the user's id inside the browser cookies, so in order to retrieve the input file from the server this variable needs to be specified in a new file called `.env`.
