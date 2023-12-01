@@ -10,6 +10,8 @@ on:
                                                  # 4 times a hour to keep traffic on aoc site low 
 jobs:
   update:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2                # clones your repo
