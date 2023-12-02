@@ -20,7 +20,7 @@ By default the program will try to get the problem's input based on the current 
   **Default**: False \
   When set to `True` creates a `main.py` file inside the `./year/day/` directory with the following contents: 
   ```python3
-  # 'Advent of code' solution for year 2022 day 1
+  # 'Advent of code' solution for year {YEAR}  day {DAY}
   import os
   import sys
                           
