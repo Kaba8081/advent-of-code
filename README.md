@@ -20,20 +20,31 @@ By default the program will try to get the problem's input based on the current 
   **Default**: False \
   When set to `True` creates a `main.py` file inside the `./year/day/` directory with the following contents: 
   ```python3
-  # 'Advent of code' solution for year {YEAR} day {DAY}
+  # 'Advent of code' solution for year 2022 day 1
   import os
   import sys
-       
-  dir_path = os.path.dirname(os.path.realpath(__file__))
-  input = None
-  
-  with open(os.path.join(dir_path, "input.txt"), "r") as file:    
-      input = file.read().strip().splitlines()
-  if not input:
-      print("Error! Input file is empty!")
-      sys.exit()
+                          
+  global DIR_PATH
+  DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+
+  def get_input():
+      input = None
+      if os.path.isfile(os.path.join(DIR_PATH, "input.txt")):
+          with open(os.path.join(DIR_PATH, "input.txt"), "r") as file:    
+              input = file.read().strip().splitlines()
+          return input
+      else:
+          print("Error! Input file does not exist!")
+          sys.exit()
                           
   if __name__ == "__main__":
+      input = get_input()
+      if not input:
+          print("Error! Input file is empty!")
+          sys.exit()
+                          
+      # your code goes here
+      
       sys.exit()
   ```
 

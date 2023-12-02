@@ -38,20 +38,31 @@ def grab_input(dir_path, year, day, create_file):
         # create main.py file if requested
         if create_file:
             with open(os.path.join(day_path, "main.py"), "w") as f:
-                f.write("""# 'Advent of code' solution for year {0} day {1}
+                f.write("""# 'Advent of code' solution for year 2022 day 1
 import os
 import sys
-     
-dir_path = os.path.dirname(os.path.realpath(__file__))
-input = None
+                        
+global DIR_PATH
+DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-with open(os.path.join(dir_path, "input.txt"), "r") as file:    
-    input = file.read().strip().splitlines()
-if not input:
-    print("Error! Input file is empty!")
-    sys.exit()
+def get_input():
+    input = None
+    if os.path.isfile(os.path.join(DIR_PATH, "input.txt")):
+        with open(os.path.join(DIR_PATH, "input.txt"), "r") as file:    
+            input = file.read().strip().splitlines()
+        return input
+    else:
+        print("Error! Input file does not exist!")
+        sys.exit()
                         
 if __name__ == "__main__":
+    input = get_input()
+    if not input:
+        print("Error! Input file is empty!")
+        sys.exit()
+                        
+    # your code goes here
+    
     sys.exit()
 """.format(year, day))
         print("Success! Input saved to {0}".format(os.path.join(day_path, "input.txt")))
