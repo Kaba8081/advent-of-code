@@ -29,8 +29,11 @@ def grab_input(dir_path, year, day, create_file):
             os.mkdir(day_path)
         
         # save the collected text
-        with open(os.path.join(day_path, "input.txt"), "w") as f:
-            f.write(res.text)
+        if not os.path.isfile(os.path.join(day_path, "input.txt")):
+            with open(os.path.join(day_path, "input.txt"), "w") as f:
+                f.write(res.text)
+        else: 
+            print("Warning! Input file already exists! Skipping...")
 
         # create main.py file if requested
         if create_file:
