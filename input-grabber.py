@@ -32,6 +32,8 @@ def grab_input(dir_path, year, day, create_file):
         if not os.path.isfile(os.path.join(day_path, "input.txt")):
             with open(os.path.join(day_path, "input.txt"), "w") as f:
                 f.write(res.text)
+
+            print("Success! Input saved to {0}".format(os.path.join(day_path, "input.txt")))
         else: 
             print("Warning! Input file already exists! Skipping...")
 
@@ -65,7 +67,8 @@ if __name__ == "__main__":
     
     sys.exit()
 """.format(year, day))
-        print("Success! Input saved to {0}".format(os.path.join(day_path, "input.txt")))
+            print("Success! File created in {0}".format(os.path.join(day_path, "main.py")))
+            
     else:
         with open(os.path.join(dir_path, "error.log"), "w") as f:
             f.write(f"{res.status_code}\n{res.text}")

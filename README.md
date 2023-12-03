@@ -2,7 +2,7 @@
 ![](https://img.shields.io/badge/days%20completed-2-red)
 ![](https://img.shields.io/badge/stars%20⭐-4-yellow)
 ## Overwiew
-This repository contains my sollutions to a series of programming challanges called [Advent of code](https://adventofcode.com/).
+This repository contains my sollutions in python to a series of programming challanges called [Advent of code](https://adventofcode.com/).
 
 ## input-grabber.py
 To skip the hustle of making a new directory every time i want to move on to the next problem, I've created this simple program that automates that process and grabs the specified input file directly from AOC website. 
@@ -20,7 +20,7 @@ By default the program will try to get the problem's input based on the current 
   **Default**: False \
   When set to `True` creates a `main.py` file inside the `./year/day/` directory with the following contents: 
   ```python3
-  # 'Advent of code' solution for year 2022 day 1
+  # 'Advent of code' solution for year {YEAR} day {DAY}
   import os
   import sys
                           
