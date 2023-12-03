@@ -43,7 +43,7 @@ def check_right(line, y):
 
 def part1(input):
     part_sum = 0
-    last_part_sum = 0
+    # last_part_sum = 0
     symbols = list(punctuation)
     symbols.remove(".")
     numeric = [str(i) for i in range(10)]
@@ -96,17 +96,83 @@ def part1(input):
                             number += check_right(input[input_i+1], line_i+1)
                             part_sum += int(number) if number else 0
 
-                print(input[input_i-1] if input_i > 0 else "")
-                print(line)
-                print(input[input_i+1] if input_i < len(input) else "")
-                print(part_sum - last_part_sum)
-                print("position:", input_i, line_i)
-                print("-"*20)
-                last_part_sum = part_sum
-
-    print(part_sum) 
+                # print(input[input_i-1] if input_i > 0 else "")
+                # print(line)
+                # print(input[input_i+1] if input_i < len(input) else "")
+                # print(part_sum - last_part_sum)
+                # print("position:", input_i, line_i)
+                # print("-"*20)
+                #last_part_sum = part_sum
 
     return part_sum
+
+def part2(input):
+    ratio_sum = 0
+    symbols = list(punctuation)
+    symbols.remove(".")
+    numeric = [str(i) for i in range(10)]
+
+    for input_i, line in enumerate(input):
+        
+        for line_i, symbol in enumerate(line):
+            if symbol == "*": # only check gears this time
+                num_list = []
+
+                # line above
+                if input_i > 0:
+                    if input[input_i-1][line_i] in numeric: # number directly to above the symbol -> left + number + right
+                        number = check_left(input[input_i-1], line_i)
+                        number += input[input_i-1][line_i]
+                        number += check_right(input[input_i-1], line_i)
+                        num_list.append(int(number)) if number else 0
+                    else:
+                        if input[input_i-1][line_i-1] in numeric: # top left corner -> left + number
+                            number = check_left(input[input_i-1], line_i-1)
+                            number += input[input_i-1][line_i-1]
+                            num_list.append(int(number)) if number else 0
+                        if input[input_i-1][line_i+1] in numeric: # top right corner -> number + right
+                            number = input[input_i-1][line_i+1]
+                            number += check_right(input[input_i-1], line_i+1)
+                            num_list.append(int(number)) if number else 0
+
+                # same line
+                if input[input_i][line_i-1] in numeric: # left + number
+                    number = check_left(line, line_i)
+                    num_list.append(int(number)) if number else 0
+                if input[input_i][line_i+1] in numeric: # number + right
+                    number = check_right(line, line_i)
+                    num_list.append(int(number)) if number else 0
+                
+                # line below
+                if input_i < len(input)-1:
+                    # directly below
+                    if input[input_i+1][line_i] in numeric: # left + number + right
+                        number = check_left(input[input_i+1], line_i)
+                        number += input[input_i+1][line_i]
+                        number += check_right(input[input_i+1], line_i)
+                        num_list.append(int(number)) if number else 0
+                    else:
+                        if input[input_i+1][line_i-1] in numeric: # bottom left corner -> left + number
+                            number = check_left(input[input_i+1], line_i-1)
+                            number += input[input_i+1][line_i-1]
+                            num_list.append(int(number)) if number else 0
+                        if input[input_i+1][line_i+1] in numeric: # bottom right corner -> number + right
+                            number = input[input_i+1][line_i+1]
+                            number += check_right(input[input_i+1], line_i+1)
+                            num_list.append(int(number)) if number else 0
+
+                # print(input[input_i-1] if input_i > 0 else "")
+                # print(line)
+                # print(input[input_i+1] if input_i < len(input) else "")
+                # print(part_sum - last_part_sum)
+                # print("position:", input_i, line_i)
+                # print("-"*20)
+                #last_part_sum = part_sum
+
+                if len(num_list) == 2:
+                    ratio_sum += (num_list[0] * num_list[1])
+
+    return ratio_sum
 
 if __name__ == "__main__":
     input = get_input()
@@ -128,5 +194,7 @@ if __name__ == "__main__":
                         
     result1 = part1(input)
     print("[1.1] Sum of all engine part numbers: ", result1)
+    result2 = part2(input)
+    print("[1.2] Sum of all engine part numbers: ", result2)
     
     sys.exit()
