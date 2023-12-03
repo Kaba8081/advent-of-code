@@ -195,6 +195,6 @@ if __name__ == "__main__":
     result1 = part1(input)
     print("[1.1] Sum of all engine part numbers: ", result1)
     result2 = part2(input)
-    print("[1.2] Sum of all engine part numbers: ", result2)
+    print("[1.2] Sum of all gear ratios: ", result2)
     
     sys.exit()
