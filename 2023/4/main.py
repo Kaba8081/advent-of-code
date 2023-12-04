@@ -15,6 +15,15 @@ def get_input():
         print("Error! Input file does not exist!")
         sys.exit()
 
+def check_winnings(win_nums, my_nums):
+    result = []
+
+    for number in my_nums:
+        if number != '' and number in win_nums:
+                result.append(number)
+    
+    return len(result)
+
 def part1(input):
     points = 0
     my_nums = []
@@ -27,27 +36,14 @@ def part1(input):
         line = line.split('|')
         line[0] = line[0].split(":")[1].split(" ")
         line[1] = line[1].split(" ")
-        
-        for my_num in line[1]:
-            if my_num != '':
-                if my_num in line[0]:
-                    if temp_points == 0:
-                        temp_points = 1
-                    else:
-                        temp_points *= 2
+
+        cards_won = check_winnings(line[0], line[1])
+
+        temp_points = 2 ** (cards_won-1) if cards_won > 0 else 0
         
         points += temp_points
 
     return points
-
-def check_winnings(win_nums, my_nums):
-    result = []
-
-    for number in my_nums:
-        if number != '' and number in win_nums:
-                result.append(number)
-    
-    return len(result)
 
 def part2(input):
     scratchcards = {}
@@ -67,18 +63,13 @@ def part2(input):
         line[1] = line[1].split(" ")
 
         cards_won = check_winnings(line[0], line[1])
-        #if card_number == 4:
-        #    print(cards_won)
-        
         for num in range(cards_won):
             num = num + 1
-            #print(card_number + num in scratchcards.keys()) if card_number == 4 else 0
+
             if card_number + num in scratchcards.keys():
                 scratchcards[card_number + num] += scratchcards[card_number]
             else:
                 scratchcards[card_number + num] = scratchcards[card_number]
-        
-        print(scratchcards)
         
     return sum(scratchcards.values())
 
