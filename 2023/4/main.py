@@ -40,6 +40,48 @@ def part1(input):
 
     return points
 
+def check_winnings(win_nums, my_nums):
+    result = []
+
+    for number in my_nums:
+        if number != '' and number in win_nums:
+                result.append(number)
+    
+    return len(result)
+
+def part2(input):
+    scratchcards = {}
+
+    for line in input:
+        card_number = int(line.split(":")[0].split(" ")[-1])
+
+        if card_number in scratchcards.keys():
+            scratchcards[card_number] += 1
+        else:
+            scratchcards[card_number] = 1
+
+        # line[0] - list of winning numbers
+        # line[1] - list of scratchcard numbers
+        line = line.split('|')
+        line[0] = line[0].split(":")[1].split(" ")
+        line[1] = line[1].split(" ")
+
+        cards_won = check_winnings(line[0], line[1])
+        #if card_number == 4:
+        #    print(cards_won)
+        
+        for num in range(cards_won):
+            num = num + 1
+            #print(card_number + num in scratchcards.keys()) if card_number == 4 else 0
+            if card_number + num in scratchcards.keys():
+                scratchcards[card_number + num] += scratchcards[card_number]
+            else:
+                scratchcards[card_number + num] = scratchcards[card_number]
+        
+        print(scratchcards)
+        
+    return sum(scratchcards.values())
+
 if __name__ == "__main__":
     input = get_input()
 
@@ -59,5 +101,7 @@ if __name__ == "__main__":
 
     result1 = part1(input)
     print("[4.1] Total scratchcards points: ", result1)
+    result2 = part2(input)
+    print("[4.2] Total scratchcards amount: ", result2)
 
     sys.exit()
