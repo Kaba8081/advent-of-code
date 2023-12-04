@@ -1,6 +1,6 @@
 # advent-of-code
-![](https://img.shields.io/badge/days%20completed-3-red)
-![](https://img.shields.io/badge/stars%20⭐-7-yellow)
+![](https://img.shields.io/badge/days%20completed-4-red)
+![](https://img.shields.io/badge/stars%20⭐-8-yellow)
 ## Overwiew
 This repository contains my sollutions in python to a series of programming challanges called [Advent of code](https://adventofcode.com/).
 
