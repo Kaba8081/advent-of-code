@@ -1,4 +1,4 @@
-# 'Advent of code' solution for year 2022 day 3
+# 'Advent of code' solution for year 2023 day 3
 import os
 import sys
 
