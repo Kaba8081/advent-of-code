@@ -1,4 +1,4 @@
-# 'Advent of code' solution for year 2022 day 1
+# 'Advent of code' solution for year 2022 day 6
 import os
 import sys
                         
@@ -38,6 +38,19 @@ def part1(input):
     
     return result
 
+def part2(input):
+    race_time = int(input[0].split(":")[1].strip().replace(' ', ''))
+    top_distance = int(input[1].split(":")[1].strip().replace(' ', ''))
+    possible_ways = 0
+
+    for speed in range(1, race_time-1):
+        distance = speed * (race_time-speed)
+        
+        if distance > top_distance:
+            possible_ways += 1
+    
+    return possible_ways
+
 if __name__ == "__main__":
     input = get_input()
     if not input:
@@ -46,5 +59,7 @@ if __name__ == "__main__":
 
     result1 = part1(input)
     print("[6.1] Multiplied winnable solutions:", result1)
+    result2 = part2(input)
+    print("[6.2] Possible ways:", result2)
     
     sys.exit()
