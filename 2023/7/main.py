@@ -2,6 +2,7 @@
 import os
 import sys
 
+from collections import Counter
 from dataclasses import dataclass
 from enum import IntEnum
                         
@@ -108,33 +109,29 @@ def part1(input: list) -> int:
     return sum(card.rank * card.bet for card in cards)
 
 def checkCardWithJokers(card: str) -> CardType:
-    symbols = list(set(card.upper()))
-    symbols.remove("J") if "J" in symbols else None # remove jokers
+    counter = Counter(card.upper())
+    highest = max(counter.values())
 
-    if len(symbols) == 1 or len(symbols) == 0:
+    wilds = counter["J"]
+    del counter["J"]
+    highest = wilds
+    if counter: 
+         highest += max(counter.values())
+
+    if highest == 5:
         return CardType.FIVE_OAK # Five of a kind
+    elif highest == 4:
+        return CardType.FOUR_OAK # Four of a kind
+    elif len(counter) == 2:
+        return CardType.FULL_HOUSE # Full house
+    elif highest == 3:
+        return CardType.THREE_OAK # Three of a kind
+    elif len(counter) == 3:
+        return CardType.TWO_PAIR # Two pair
+    elif highest == 2:
+        return CardType.ONE_PAIR # One pair
     else:
-        if "J" in list(card):
-            letter_count = {}
-            for letter in list(card):
-                if letter not in letter_count.keys():
-                    letter_count[letter] = 1
-                else:
-                    letter_count[letter] += 1
-            
-            if "J" in letter_count.keys():
-                del letter_count["J"]
-
-            if max(letter_count.values()) + card.count("J") == 4:
-                return CardType.FOUR_OAK # Four of a kind
-            elif max(letter_count.values()) + card.count("J") == 3:
-                return CardType.THREE_OAK # Three of a kind
-            elif max(letter_count.values()) + card.count("J") == 2:
-                return CardType.ONE_PAIR # One pair
-            else:
-                return CardType.HIGH_CARD # High card
-        else:
-            return checkCard(card)
+        return CardType.HIGH_CARD # High card
         
 def part2(input: list) -> int:
     """check type of each card -> rank cards -> sum ranks * bet"""
@@ -147,7 +144,6 @@ def part2(input: list) -> int:
     
     for card in cards:
         card.rankCard(cards.copy(), 2)
-        print(card)
 
     return sum(card.rank * card.bet for card in cards)
 
