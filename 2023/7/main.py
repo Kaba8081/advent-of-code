@@ -8,7 +8,7 @@ from enum import IntEnum
 global DIR_PATH
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-def get_input():
+def get_input() -> list:
     input = None
     if os.path.isfile(os.path.join(DIR_PATH, "input.txt")):
         with open(os.path.join(DIR_PATH, "input.txt"), "r") as file:    
@@ -34,17 +34,22 @@ class Card:
     bet: int
     rank: int
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.value} {self.type} {self.bet} {self.rank}"
     
-    def rankCard(self, cards_list) -> None:
+    def rankCard(self, cards_list: list, part: int) -> None:
         cards_list.remove(self) # remove self from list
         
         # rank = count of worse cards + 1 
         count = 0
         points = {}
-        values = "A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2".split(", ")
-        for i in range(len(values)): points[values[i]] = len(values)-i
+        values = []
+        if part == 1:
+            values = "A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2".split(", ")
+        else:
+            values = "A, K, Q, T, 9, 8, 7, 6, 5, 4, 3, 2, J".split(", ")
+
+        for i in range(len(values)): points[values[i]] = len(values) - i
 
         for card in cards_list:
             if self.type > card.type:
@@ -60,8 +65,7 @@ class Card:
                         break
         self.rank = count + 1
 
-
-def checkCard(card) -> CardType:
+def checkCard(card: str) -> CardType:
     # Five of a kind, where all five cards have the same label: AAAAA
     # Four of a kind, where four cards have the same label and one card has a different label: AA8AA
     # Full house, where three cards have the same label, and the remaining two cards share a different label: 23332
@@ -89,8 +93,8 @@ def checkCard(card) -> CardType:
     else:
         return CardType.HIGH_CARD # High card
     
-def part1(input) -> int:
-    # check type of each card -> rank cards -> sum ranks * bet
+def part1(input: list) -> int:
+    """check type of each card -> rank cards -> sum ranks * bet"""
     cards = []
 
     for line in input:
@@ -99,7 +103,51 @@ def part1(input) -> int:
         cards.append(Card(card, type, int(bet), 0))
     
     for card in cards:
-        card.rankCard(cards.copy())
+        card.rankCard(cards.copy(), 1)
+
+    return sum(card.rank * card.bet for card in cards)
+
+def checkCardWithJokers(card: str) -> CardType:
+    symbols = list(set(card.upper()))
+    symbols.remove("J") if "J" in symbols else None # remove jokers
+
+    if len(symbols) == 1 or len(symbols) == 0:
+        return CardType.FIVE_OAK # Five of a kind
+    else:
+        if "J" in list(card):
+            letter_count = {}
+            for letter in list(card):
+                if letter not in letter_count.keys():
+                    letter_count[letter] = 1
+                else:
+                    letter_count[letter] += 1
+            
+            if "J" in letter_count.keys():
+                del letter_count["J"]
+
+            if max(letter_count.values()) + card.count("J") == 4:
+                return CardType.FOUR_OAK # Four of a kind
+            elif max(letter_count.values()) + card.count("J") == 3:
+                return CardType.THREE_OAK # Three of a kind
+            elif max(letter_count.values()) + card.count("J") == 2:
+                return CardType.ONE_PAIR # One pair
+            else:
+                return CardType.HIGH_CARD # High card
+        else:
+            return checkCard(card)
+        
+def part2(input: list) -> int:
+    """check type of each card -> rank cards -> sum ranks * bet"""
+    cards = []
+
+    for line in input:
+        card, bet = line.split(" ")
+        type = checkCardWithJokers(card)
+        cards.append(Card(card, type, int(bet), 0))
+    
+    for card in cards:
+        card.rankCard(cards.copy(), 2)
+        print(card)
 
     return sum(card.rank * card.bet for card in cards)
 
@@ -108,7 +156,15 @@ if __name__ == "__main__":
     if not input:
         print("Error! Input file is empty!")
         sys.exit()
+                        
+    input1 = """32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483""".strip().splitlines()
     
     result1 = part1(input)
     print("[7.1] Sum of all bets x ranks: ", result1)
+    result2 = part2(input)
+    print("[7.2] Sum of all winnings: ", result2)
     sys.exit()
