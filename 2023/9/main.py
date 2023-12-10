@@ -23,13 +23,22 @@ def findNextDiffs(line) -> list:
     
     return result
 
-def findNextValue(lines) -> int:
-    lines[-1].append(0) # last value of last line is always 0
+def findNextValue(lines, back=False) -> int:
+    if back:
+        lines[-1].insert(0, 0) # first value of last line is always 0
+    else:
+        lines[-1].append(0) # last value of last line is always 0
 
     for i in range(len(lines)-1, 0, -1):
-        lines[i-1].append(lines[i][-1] + lines[i-1][-1])
+        if back:
+            lines[i-1].insert(0, lines[i-1][0] - lines[i][0])
+        else:
+            lines[i-1].append(lines[i][-1] + lines[i-1][-1])
 
-    return lines[0][-1]
+    if back: # part 2
+        return lines[0][0]
+    else: # part 1
+        return lines[0][-1]
 
 def part1(input) -> int:
     final_sum = 0
@@ -42,8 +51,24 @@ def part1(input) -> int:
         temp_lines.append(line)
         while len(set(temp_lines[-1])) != 1 or temp_lines[-1][0] != 0:
             temp_lines.append(findNextDiffs(temp_lines[-1].copy()))
-            
+
         final_sum += findNextValue(temp_lines)
+
+    return final_sum
+
+def part2(input) -> int:
+    final_sum = 0
+
+    for line in input:
+        line = line.split()
+        line = [int(value) for value in line]
+        temp_lines = []
+
+        temp_lines.append(line)
+        while len(set(temp_lines[-1])) != 1 or temp_lines[-1][0] != 0:
+            temp_lines.append(findNextDiffs(temp_lines[-1].copy()))
+
+        final_sum += findNextValue(temp_lines, back=True)
 
     return final_sum
 
@@ -55,10 +80,11 @@ if __name__ == "__main__":
 
     input1 ="""0 3 6 9 12 15
 1 3 6 10 15 21
-10 13 16 21 30 45
-9 5 1 -3 -7 -11 -15 -19 -23 -27 -31""".strip().splitlines()
+10 13 16 21 30 45""".strip().splitlines()
 
     result1 = part1(input)
     print("[8.1] Sum of all extrapolated values:", result1)
+    result2 = part2(input)
+    print("[8.2] Sum of all backward extrapolated values:", result2)
     
     sys.exit()
