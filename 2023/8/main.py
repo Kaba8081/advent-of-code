@@ -36,19 +36,54 @@ def part1(input) -> int:
 
     return moves
 
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def lcm(a, b):
+    return int((a * b) / gcd(a, b))
+
+def part2(input) -> int:
+    instructions = input[0]
+    current_pos = {}
+    required_moves = {}
+    map = {}
+
+    for line in input[2:]:
+        line = line.split(" = ")
+        line[1] = line[1].split(", ")
+
+        map[line[0]] = (line[1][0][1:], line[1][1][:-1])
+
+        if line[0][-1] == "A":
+            current_pos[line[0]] = line[0]
+    
+    for node in current_pos.keys():
+        required_moves[node] = 0
+
+        while current_pos[node][-1] != "Z":
+            required_moves[node] += 1
+            if instructions[(required_moves[node] - 1) % len(instructions)] == "L":
+                current_pos[node] = map[current_pos[node]][0]
+            else:
+                current_pos[node] = map[current_pos[node]][1]
+
+    lcm_of_moves = 1
+    for moves in required_moves.values():
+        lcm_of_moves = lcm(lcm_of_moves, moves)
+        
+    return lcm_of_moves
+
 if __name__ == "__main__":
     input = get_input()
     if not input:
         print("Error! Input file is empty!")
         sys.exit()
-
-    input1 = """LLR
-
-AAA = (BBB, BBB)
-BBB = (AAA, ZZZ)
-ZZZ = (ZZZ, ZZZ)""".splitlines()
     
     result1 = part1(input)
     print("[8.1] How many steps are required to reach ZZZ: ", result1)
+    result2 = part2(input)
+    print("[8.2] How many steps are required to reach nodes xxZ:", result2)
     
     sys.exit()
