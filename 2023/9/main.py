@@ -17,7 +17,6 @@ def get_input():
 
 def findNextDiffs(line) -> list:
     result = []
-
     for i in range(len(line)-1): # skip last element
         result.append(line[i+1] - line[i])
     
@@ -78,13 +77,9 @@ if __name__ == "__main__":
         print("Error! Input file is empty!")
         sys.exit()
 
-    input1 ="""0 3 6 9 12 15
-1 3 6 10 15 21
-10 13 16 21 30 45""".strip().splitlines()
-
     result1 = part1(input)
-    print("[8.1] Sum of all extrapolated values:", result1)
+    print("[9.1] Sum of all extrapolated values:", result1)
     result2 = part2(input)
-    print("[8.2] Sum of all backward extrapolated values:", result2)
+    print("[9.2] Sum of all backward extrapolated values:", result2)
     
     sys.exit()
