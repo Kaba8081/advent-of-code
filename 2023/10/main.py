@@ -104,19 +104,56 @@ def part1(input) -> int:
 
     return steps
 
+"""
+Part 2 solved using tlareg's (https://www.reddit.com/u/tlareg/) solution
+Pick's theorem (https://en.wikipedia.org/wiki/Pick%27s_theorem):
+A = i + b/2 - 1
+
+where A - area of a polygon, i - number of points inside the polygon, b - number of points on the edge of the polygon
+b - solution to part 1 * 2
+i - solution to part 2
+A - Area can be calculated using Sholace formula (https://en.wikipedia.org/wiki/Shoelace_formula):
+
+2A = [(x1 * y2) - (x2 * y1)] +  [(x2 * y3) - (x3 * y2)] + ... + [(xn * y1) - (x1 * yn)]
+where (x1, y1), (x2, y2), ... (xn, yn) are the coordinates of the polygon's vertices
+
+i = 2A - b + 2
+"""
+def part2(input) -> int:
+    edges = []
+
+    map = [list(line) for line in input]
+    loop_map = []
+
+    for y, row in enumerate(map):
+        for x, value in enumerate(row):
+            if value == "S":
+                loop_map = locateLoop(map, y, x)
+                break
+
+    for pipe in loop_map:
+        if map[pipe[0]][pipe[1]] in "SLJ7F": # if the pipe is a corner, add it to the edge count
+            edges.append((pipe[0], pipe[1]))
+
+    area = 0
+    for i in range(len(edges)):
+        next_i = (i + 1) % len(edges)
+        currentX, currentY = edges[i]
+        nextX, nextY = edges[next_i]
+        area += currentX * nextY - currentY * nextX
+    area = abs(area) / 2
+    
+    return int(area - len(loop_map)/2) + 1 # points inside the loop
+
 if __name__ == "__main__":
     input = get_input()
     if not input:
         print("Error! Input file is empty!")
         sys.exit()
-
-#     input = """..F7.
-# .FJ|.
-# SJ.L7
-# |F--J
-# LJ...""".strip().splitlines()
                         
     result1 = part1(input)
     print("[10.1] How many steps to get to the furthest point: ", result1)
+    result2 = part2(input)
+    print("[10.2] How many tiles are enclosed by the loop: ", result2)
     
     sys.exit()
