@@ -1,6 +1,8 @@
 # 'Advent of code' solution for year 2023 day 5
 import os
 import sys
+
+from time import sleep
                         
 global DIR_PATH
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -41,6 +43,47 @@ def part1(input):
                 seeds_transformed = temp_seeds_transformed
 
     return min(seeds_transformed.values())
+
+def part2(input) -> int:
+    seeds = []
+    min_values = []
+    
+    line = input[0].split(":")[1][1:].split(" ") # first line contains the seeds list
+    seeds = [int(value) for value in line]
+
+    for i in range(0, len(seeds), 2):
+        ranges = [[seeds[i], seeds[i] + seeds[i+1]]]
+        results = []
+
+        for line in input[1:]: # loop through all the maps
+            map_lines = line.split("\n")[1:]
+            while ranges:
+                r = ranges.pop()
+
+                for map_line in map_lines:
+                    target, start_range, size = [int(value) for value in map_line.split(" ")]
+
+                    end_range = start_range + size
+                    offset = target - start_range
+
+                    if end_range <= r[0] or r[1] <= start_range:
+                        continue
+                    if r[0] < start_range:
+                        ranges.append([r[0], start_range])
+                        r[0] = start_range
+                    if r[1] > end_range:
+                        ranges.append([end_range, r[1]])
+                        r[1] = end_range
+                    results.append([r[0] + offset, r[1] + offset])
+                    break
+                else:
+                    results.append([r[0], r[1]])
+            ranges = results
+            results = []
+        min_values += ranges
+
+    min_values = [value[0] for value in min_values]
+    return min(min_values)
 
 if __name__ == "__main__":
     input = get_input()
@@ -84,10 +127,7 @@ humidity-to-location map:
 
     result1 = part1(input)
     print("[5.1] Lowest location number: ", result1)
-
     result2 = part2(input)
     print("[5.2] Lowest location number: ", result2)
 
-    input("Press any key to continue...")
-    
     sys.exit()
