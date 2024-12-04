@@ -39,6 +39,30 @@ def part1(lines: list[str]) -> int:
 
     return word_count
 
+def check_xmas(lines: list[str], pos: tuple[int, int]) -> int:
+    """Find diagonal pattern 'MAS' in the given list of lines at the given position"""
+    x, y = pos
+
+    # Edge of the grid definetly doesn't contain the pattern
+    if x == 0 or y == 0 or x == len(lines) - 1 or y == len(lines[0]) - 1:
+        return 0
+
+    letters = {"M", "S"}
+
+    if ({lines[x - 1][y - 1], lines[x + 1][y + 1]} == letters
+        and {lines[x - 1][y + 1], lines[x + 1][y - 1]} == letters):
+        return 1
+
+    return 0
+
+def part2(lines: list[str]) -> int:
+    word_count = 0
+    indexes = [(i, m.start()) for i, line in enumerate(lines) for m in re.finditer("A", line)]
+
+    for index in indexes:
+        word_count += check_xmas(lines, index)
+    return word_count
+
 def get_input():
     input = None
     if os.path.isfile(os.path.join(DIR_PATH, "input.txt")):
@@ -57,5 +81,7 @@ if __name__ == "__main__":
 
     result1 = part1(input)
     print(f"Part 1: {result1}")
+    result2 = part2(input)
+    print(f"Part 2: {result2}")
 
     sys.exit()
