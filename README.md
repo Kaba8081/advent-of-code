@@ -4,7 +4,7 @@
 ## Overwiew
 This repository contains my sollutions in Python to a series of programming challanges called [Advent of code](https://adventofcode.com/).
 
-## input-grabber.py
+## aoc.py
 To skip the hustle of making a new directory every time i want to move on to the next problem, I've created this simple program that automates that process and grabs the specified input file directly from AOC website. 
 
 ### Flags
@@ -18,34 +18,40 @@ By default the program will try to get the problem's input based on the current 
   specify desired day of the challange (between 1 - 25)
 - `-c` or `--create` \
   **Default**: False \
-  When set to `True` creates a `main.py` file inside the `./year/day/` directory with the following contents: 
+  When set to `True` creates a `main.py` file inside the `./solutions/year/day/` directory with the following contents: 
   ```python3
-  # 'Advent of code' solution for year {YEAR} day {DAY}
-  import os
-  import sys
-                          
-  global DIR_PATH
-  DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+    # 'Advent of code' solution for year {YEAR} day {DAY}
+    import os
+    import sys
 
-  def get_input():
-      input = None
-      if os.path.isfile(os.path.join(DIR_PATH, "input.txt")):
-          with open(os.path.join(DIR_PATH, "input.txt"), "r") as file:    
-              input = file.read().strip().splitlines()
-          return input
-      else:
-          print("Error! Input file does not exist!")
-          sys.exit()
-                          
-  if __name__ == "__main__":
-      input = get_input()
-      if not input:
-          print("Error! Input file is empty!")
-          sys.exit()
-                          
-      # your code goes here
-      
-      sys.exit()
+    DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+
+    def _get_input():
+        content = None
+        if os.path.isfile(os.path.join(DIR_PATH, "input.txt")):
+            with open(os.path.join(DIR_PATH, "input.txt"), "r") as file:
+                content = file.read().strip().splitlines()
+            return content
+        else:
+            print("Error! Input file does not exist!")
+            sys.exit()
+
+    def part_1(i: list[str]):
+        pass
+
+    def part_2(i: list[str]):
+        pass
+
+    if __name__ == "__main__":
+        inputs = _get_input()
+        if not inputs:
+            print("Error! Input file is empty!")
+            sys.exit()
+
+        part_1(inputs)
+        part_2(inputs)
+
+        sys.exit()
   ```
 
 ### AOC_COOKIE
