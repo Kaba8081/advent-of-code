@@ -14,11 +14,6 @@ def _get_input():
         print("Error! Input file does not exist!")
         sys.exit()
 
-def gen_invalid_ids(size: int) -> list[int]:
-    result = []
-
-    return result
-
 def part_1(i: list[str]):
     result = 0
 
